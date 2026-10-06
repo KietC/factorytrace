@@ -32,7 +32,7 @@ class MigrationPathHardeningTests(unittest.TestCase):
 
     def test_migration_rejects_source_root_reparse_before_resolve(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             real_source = create_case("real-source", root)
             linked_source = root / "linked-source"
             self._make_directory_link(linked_source, real_source)
@@ -45,7 +45,7 @@ class MigrationPathHardeningTests(unittest.TestCase):
 
     def test_migration_rejects_destination_parent_reparse_before_resolve(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             source = create_case("source", root)
             real_parent = root / "real-destination-parent"
             real_parent.mkdir()
@@ -60,7 +60,7 @@ class MigrationPathHardeningTests(unittest.TestCase):
 
     def test_canonical_copy_excludes_runtime_and_release_segments(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             source = create_case("source", root)
             (source / "evidence" / "valid.pdf").write_bytes(b"frozen evidence")
             (source / "logs" / "audit.json").write_text("{}", encoding="utf-8")
@@ -93,7 +93,7 @@ class MigrationPathHardeningTests(unittest.TestCase):
 class AuditCompatibilityTests(unittest.TestCase):
     def test_audit_accepts_legacy_logs_commands_log_with_warning(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            case = create_case("legacy-command-log", Path(temporary))
+            case = create_case("legacy-command-log", Path(temporary).resolve())
             legacy_path = case / "logs" / "commands.log"
             (case / "commands.log").replace(legacy_path)
 
@@ -128,7 +128,7 @@ class LegacyProbabilityReportTests(unittest.TestCase):
             self.skipTest("reports extra is not installed")
 
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             markdown = root / "old-main.md"
             markdown.write_text(
                 "# 主报告\n\n## 四维概率定义\n\n"
@@ -171,7 +171,7 @@ class LegacyProbabilityReportTests(unittest.TestCase):
 
     def test_default_case_lint_discovers_reports_and_rankings_recursively(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            case = create_case("lint-discovery", Path(temporary))
+            case = create_case("lint-discovery", Path(temporary).resolve())
             report_dir = case / "output" / "reports"
             ranking_dir = case / "output" / "rankings"
             report_dir.mkdir(parents=True, exist_ok=True)

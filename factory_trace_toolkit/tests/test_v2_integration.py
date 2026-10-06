@@ -44,7 +44,7 @@ class V2IntegrationTests(unittest.TestCase):
 
     def test_complete_cli_migration_never_logs_to_source(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             source = root / "legacy"
             (source / "candidates").mkdir(parents=True)
             (source / "case.json").write_text(
@@ -104,7 +104,7 @@ class V2IntegrationTests(unittest.TestCase):
 
     def test_canonical_migration_does_not_follow_external_junction(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             source = root / "legacy"
             (source / "candidates").mkdir(parents=True)
             (source / "work" / "xlsx_build").mkdir(parents=True)
@@ -170,7 +170,7 @@ class V2IntegrationTests(unittest.TestCase):
 
     def test_failed_migration_never_publishes_partial_destination(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             source = root / "invalid"
             source.mkdir()
             (source / "case.json").write_text(
@@ -194,7 +194,7 @@ class V2IntegrationTests(unittest.TestCase):
 
     def test_yaml_process_pack_is_safe_loaded(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary).resolve()
             (root / "probe.yaml").write_text(
                 """schema: factorytrace.process-pack.v2
 pack_id: probe
@@ -215,7 +215,7 @@ social: {maximum_authority: entity_identity}
 
     def test_audit_public_payload_removes_deprecated_confidence_key(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
-            case = create_case("audit-v2", Path(temporary))
+            case = create_case("audit-v2", Path(temporary).resolve())
             report = audit_case(case, "research")
             rendered = json.dumps(report, ensure_ascii=False)
             self.assertNotIn('"confidence_index"', rendered)

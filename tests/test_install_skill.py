@@ -23,7 +23,7 @@ class SkillInstallerTests(unittest.TestCase):
 
     def test_install_and_idempotent_rerun(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
+            root = Path(temp).resolve()
             source = self.source(root)
             target = root / "技能 有空格"
             self.assertEqual(MODULE.install(source, target)["status"], "INSTALLED")
@@ -31,7 +31,7 @@ class SkillInstallerTests(unittest.TestCase):
 
     def test_existing_different_version_is_preserved(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
+            root = Path(temp).resolve()
             source = self.source(root)
             target = root / "skills"
             MODULE.install(source, target)
@@ -43,13 +43,13 @@ class SkillInstallerTests(unittest.TestCase):
 
     def test_nested_target_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
-            source = self.source(Path(temp))
+            source = self.source(Path(temp).resolve())
             with self.assertRaises(ValueError):
                 MODULE.install(source, source / "nested")
 
     def test_missing_entrypoint_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
+            root = Path(temp).resolve()
             source = root / "empty"
             source.mkdir()
             with self.assertRaises(ValueError):

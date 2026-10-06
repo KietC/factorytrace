@@ -47,6 +47,7 @@ This is a failure-oriented companion to the ordered [deployment guide](../DEPLOY
 | Tesseract reports missing language | Engine installed, trained data unresolved | Pass `--tessdata-dir` to bundled resources and inspect `--list-langs` |
 | Chinese OCR smoke fails | Probe/font/data/runtime mismatch | Use bundled licensed font and trained data; inspect actual recognized text and probe hash; never lower accuracy assertions to hide a failure |
 | Venv stops after moving repository | Venv contains old absolute paths | Stop tasks; move old venv aside; recreate/install in new location |
+| Migration or Skill installation rejects a macOS `/var/...` path | The OS temporary directory can use the `/var` symlink to `/private/var`; source/destination ancestor links are deliberately rejected | Verify the trusted base directory and use its real `/private/var/...` path. Tests canonicalize only their trusted temporary root before creating deliberate links; never silently resolve an untrusted case/input link to bypass the guard |
 | ZIP extraction fails under long paths | Nested archive/path/tool limits | Extract to a short local directory; preserve originals; don't flatten source folders |
 | Network share executable fails | Share permissions, policy or file locks | Keep runtime/venv local; place cases on a writable share only after a read/write check; no automatic SMB reconfiguration |
 | Office export works but opening fails | Shared-path/access/application context or corrupt output | Read back generated file with openpyxl/python-docx; test local copy and hostname-based share separately |
@@ -131,6 +132,7 @@ The OCR smoke uses licensed bundled font assets where available, so it should no
 | Tesseract 缺语言 | 引擎与数据分离 | 明确 tessdata-dir 与 list-langs |
 | 中文 OCR 测试失败 | 探针/字体/数据/运行时 | 用授权包内字体/数据，查实际文字/哈希，不降低准确断言掩盖 |
 | 搬仓库后 venv 坏 | 路径固化 | 停任务、旧 venv 移开、新建重装 |
+| macOS 的 `/var/...` 迁移或 Skill 安装被拒绝 | 系统临时目录可能通过 `/var` 链接指向 `/private/var`；源/目标的祖先链接会被有意拒绝 | 核实可信根目录后使用真实 `/private/var/...` 路径。测试只先规范化可信临时根，再创建故意拒绝的链接；不要自动解析不可信案件/输入链接来绕过保护 |
 | ZIP 长路径错 | 多层目录/工具限制 | 短本地目录解压，不压平源码，不改原件 |
 | 共享盘运行程序错 | 权限/策略/锁 | runtime/venv 本地，案件共享先读写验，不自动改 SMB |
 | Office 生成但打不开 | 路径权限/应用上下文/损坏 | openpyxl/docx 回读，测试本地副本与主机名共享 |

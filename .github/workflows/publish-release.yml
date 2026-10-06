@@ -1,0 +1,90 @@
+name: publish-reviewed-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Existing draft tag / 已有发布草稿标签"
+        required: true
+        default: "v2.0.0"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-reviewed-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      PYTHONUTF8: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      RELEASE_TAG: ${{ inputs.release_tag }}
+    steps:
+      # Fetch only public source; do not retain credentials in the checkout.
+      # 只获取公开源码，不在检出目录保留凭据。
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: factory_trace_toolkit/constraints-tested.txt
+      - name: Validate tag and install tested dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          test "$RELEASE_TAG" = "v$(tr -d '\r\n' < factory_trace_toolkit/VERSION)"
+          python -m pip install "pip==26.1.2"
+          python -m pip install --constraint factory_trace_toolkit/constraints-tested.txt -e "./factory_trace_toolkit[full]"
+          python -m pip check
+      - name: Verify reviewed source, unit tests and Skill
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/verify_public_release.py --root .
+          python -W error::DeprecationWarning -m unittest discover -s factory_trace_toolkit/tests -v
+          python -m unittest discover -s skills/trace-source-factory/tests -v
+          python -m unittest discover -s tests -v
+          python skills/trace-source-factory/scripts/preflight_case.py --self-test
+          python factory_trace_toolkit/scripts/verify_toolkit.py --skip-runtime-smoke --output "$RUNNER_TEMP/source-verification.json"
+      - name: Build source archive and verify isolated wheel
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/release-assets"
+          python scripts/package_public_release.py --root . --output "$RUNNER_TEMP/release-assets/factorytrace-$RELEASE_TAG-source.zip"
+          python factory_trace_toolkit/scripts/wheel_smoke.py --output "$RUNNER_TEMP/wheel-verification.json" --wheel-output-dir "$RUNNER_TEMP/release-assets"
+          cd "$RUNNER_TEMP/release-assets"
+          sha256sum "factorytrace-$RELEASE_TAG-source.zip" factory_trace_toolkit-*.whl > SHA256SUMS.txt
+          sha256sum --check SHA256SUMS.txt
+      - name: Upload and publish only the matching unpublished draft
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # Require an empty matching draft and no existing Git tag; never clobber assets.
+          # 要求匹配且为空的草稿、标签未创建，绝不覆盖重名附件。
+          set +e
+          git ls-remote --exit-code origin "refs/tags/$RELEASE_TAG" > "$RUNNER_TEMP/tag-refs.txt"
+          tag_status=$?
+          set -e
+          test "$tag_status" -eq 2 || { echo "Refusing an existing tag or a failed tag lookup"; exit 1; }
+          gh release view "$RELEASE_TAG" --json isDraft,targetCommitish,assets > "$RUNNER_TEMP/release-state.json"
+          python -c 'import json, os; from pathlib import Path; state=json.loads((Path(os.environ["RUNNER_TEMP"])/"release-state.json").read_text()); assert state["isDraft"] is True, "Refusing a published release"; assert state["targetCommitish"] == os.environ["GITHUB_SHA"], "Draft must target this exact full commit"; assert not state["assets"], "Review and clear task-owned draft assets before retrying"'
+          gh release upload "$RELEASE_TAG" "$RUNNER_TEMP/release-assets/factorytrace-$RELEASE_TAG-source.zip" "$RUNNER_TEMP"/release-assets/factory_trace_toolkit-*.whl "$RUNNER_TEMP/release-assets/SHA256SUMS.txt"
+          # Logs and environment receipts remain on the runner, not in release assets.
+          # 日志与环境回执留在 runner，不作为发布附件。
+          gh release view "$RELEASE_TAG" --json isDraft,targetCommitish > "$RUNNER_TEMP/release-state.json"
+          python -c 'import json, os; from pathlib import Path; state=json.loads((Path(os.environ["RUNNER_TEMP"])/"release-state.json").read_text()); assert state["isDraft"] is True; assert state["targetCommitish"] == os.environ["GITHUB_SHA"], "Draft changed during upload"'
+          gh release edit "$RELEASE_TAG" --draft=false

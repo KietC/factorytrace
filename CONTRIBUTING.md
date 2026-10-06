@@ -62,6 +62,26 @@ Use the manifest-driven packager, not a recursive ZIP of your workspace. First r
 
 The packager refuses existing ZIP outputs, requires a passing review, includes only manifest entries, validates CRC/content hashes, and writes a `.zip.sha256` sidecar. Keep artifacts outside the source tree. Stage only reviewed manifest files; check a fresh clone before publishing. Never upload local doctor/test receipts merely to prove that tests ran.
 
+### 6. Publish from GitHub without uploading local environments
+
+For a reviewed commit, the manually triggered [publishing workflow](.github/workflows/publish-release.yml) builds the complete ZIP and an isolated-install-tested wheel directly on a GitHub runner. It transfers no local cases, browser sessions, venvs or host receipts. This is also a practical fallback when a local large-file upload stalls; it does not establish why that upload failed.
+
+1. Finish all changes, regenerate both manifests, review, commit and push. The target must be a full commit SHA, not a short SHA or an unreviewed moving branch.
+2. Confirm the package version in `factory_trace_toolkit/VERSION`; the tag must be exactly `v` plus that version. Write reviewed bilingual release notes outside the source tree.
+3. Create an unpublished draft pointing at that full SHA, then dispatch from the same commit/branch:
+
+```bash
+RELEASE_TAG="v$(tr -d '\r\n' < factory_trace_toolkit/VERSION)"
+RELEASE_COMMIT="$(git rev-parse HEAD)"
+gh release create "$RELEASE_TAG" --draft --target "$RELEASE_COMMIT" --title "FactoryTrace $RELEASE_TAG" --notes-file ../release-notes.md
+gh workflow run publish-release.yml --ref main -f "release_tag=$RELEASE_TAG"
+```
+
+4. Monitor the resulting run in Actions. The workflow rechecks privacy/hashes, 76 unit tests, Skill self-test and isolated wheel resources; external OCR/video engine checks are explicitly excluded. It requires an empty draft targeting the exact SHA and no existing Git tag; lookup errors fail closed. Only users with the required repository/Actions permissions can trigger publication. The job uses the repository token; no personal token is embedded in source. Do not manually edit/publish the draft while the run is active.
+5. Successful publication supplies source ZIP, wheel and `SHA256SUMS.txt`. Download all three, verify both SHA-256 digests and ZIP CRC, and test a fresh clone/extraction. A failed run can leave an unpublished draft with partial assets; inspect it before retrying. The workflow never uses `--clobber`: duplicate asset names stop the run. Review and clear only identified task-owned draft assets before retrying; do not delete published assets or move existing tags.
+
+Do not work around a stale `starter` upload by disabling TLS, deleting the repository, or rewriting history. Cancel only the identified task-owned uploader and remove/replace only that draft's incomplete assets. Keep local source archives until the remote files have passed read-back checks.
+
 ---
 
 ## 中文
@@ -121,3 +141,23 @@ PR 说明问题、实现、影响的证据语义、测试、平台限制、依�
 ```
 
 打包器不覆盖已有 ZIP，要求审查通过，只收录清单文件，验证 CRC 与内容哈希，并生成 `.zip.sha256`。产物放仓库外；只暂存审核文件，发布前以全新克隆复验。不能为了证明测试而上传含主机信息的 doctor/测试回执。
+
+### 6. 由 GitHub 发布，不上传本机环境
+
+审核提交可用手动触发的 [发布流程](.github/workflows/publish-release.yml)，让 GitHub runner 直接构建完整 ZIP 和经过隔离安装测试的 wheel。不传本地案件、浏览器登录态、venv 或宿主回执。它也能作为本地大文件上传停滞时的替代通道，但不能据此判定原上传的失败原因。
+
+1. 完成改动、重生两个清单、审查、提交并推送。目标必须是完整 SHA，不用短 SHA 或未审核的移动分支。
+2. 看 `factory_trace_toolkit/VERSION`，标签必须等于 `v` 加版本；双语发布说明放源码树外。
+3. 新建指向完整 SHA 的未发布草稿，再从同一个提交/分支触发：
+
+```bash
+RELEASE_TAG="v$(tr -d '\r\n' < factory_trace_toolkit/VERSION)"
+RELEASE_COMMIT="$(git rev-parse HEAD)"
+gh release create "$RELEASE_TAG" --draft --target "$RELEASE_COMMIT" --title "FactoryTrace $RELEASE_TAG" --notes-file ../release-notes.md
+gh workflow run publish-release.yml --ref main -f "release_tag=$RELEASE_TAG"
+```
+
+4. 在 Actions 看实际运行。流程复查隐私/哈希、76 项单测、Skill 自检和隔离 wheel 资源；明确不含外部 OCR/视频引擎测试。要求草稿为空、指向精确 SHA 且 Git 标签尚未创建；查询错误直接停止。只有具备所需仓库/Actions 权限者可触发发布。仅发布任务使用仓库 token，不把个人 token 写入源码。运行中不要手动编辑或发布该草稿。
+5. 成功后有源码 ZIP、wheel 和 `SHA256SUMS.txt`。三个都下载，核验两个 SHA-256 与 ZIP CRC，并测试全新克隆/解压。失败可能留下带部分附件的未发布草稿，重试前先看状态。流程不用 `--clobber`，重名即停；重试前只清理确认属于本任务的草稿附件，不删正式发布附件，不移动既有标签。
+
+`starter` 上传停滞时不要关闭 TLS、删仓库或改写历史。只取消确认属于本任务的上传进程，只处理该草稿未完成的附件；远端文件回读验收前保留本地源码包。

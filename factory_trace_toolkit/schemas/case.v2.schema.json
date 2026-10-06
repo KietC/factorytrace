@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/factorytrace/case.v2.schema.json",
+  "title": "Factory trace case v2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "objective",
+    "created_at_utc",
+    "time_zone",
+    "status",
+    "assessment_policy"
+  ],
+  "properties": {
+    "schema": {"const": 2},
+    "schema_version": {"const": 2},
+    "case_id": {"type": "string", "minLength": 1},
+    "name": {"type": "string"},
+    "objective": {"type": "string", "minLength": 1},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "time_zone": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": ["open", "research", "operational", "paused", "superseded", "confirmed", "closed"]
+    },
+    "assessment_policy": {
+      "type": "object",
+      "required": ["single_probability_forbidden", "mainland_filter_affects_attribution", "llm_outputs_are_evidence"],
+      "properties": {
+        "single_probability_forbidden": {"const": true},
+        "mainland_filter_affects_attribution": {"const": false},
+        "llm_outputs_are_evidence": {"const": false}
+      },
+      "additionalProperties": true
+    },
+    "migration": {"type": "object"}
+  },
+  "additionalProperties": true
+}

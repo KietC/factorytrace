@@ -1,0 +1,62 @@
+{
+  "schema": "factorytrace.process-pack.v2",
+  "pack_id": "sanitary_valve",
+  "version": 1,
+  "description": "Hot-water sanitary safety-valve pack requiring independent WaterMark and UL exact-scope certification plus controlled assembly and relief testing.",
+  "extends": [
+    "certified_product"
+  ],
+  "required_processes": [
+    "valve_body_manufacture",
+    "precision_machining",
+    "assembly",
+    "set_pressure_adjustment",
+    "leak_test",
+    "pressure_temperature_relief_test"
+  ],
+  "required_evidence": [
+    "valve_body_batch_record",
+    "controlled_bom",
+    "set_pressure_record",
+    "leak_test_result",
+    "relief_test_result"
+  ],
+  "required_photos": [
+    "inlet_outlet_threads",
+    "valve_body_material_mark",
+    "relief_mechanism",
+    "test_rig_with_instrument_ids"
+  ],
+  "required_documents": [
+    "watermark_certificate_schedule",
+    "ul_product_iq_record",
+    "ul_fus_or_manufacturing_location_record",
+    "controlled_bom",
+    "calibration_certificates"
+  ],
+  "certification": {
+    "mode": "all",
+    "schemes": [
+      "WaterMark",
+      "UL"
+    ],
+    "hard_gates": []
+  },
+  "events": {
+    "required_biz_steps": [
+      "assembling",
+      "set_pressure_adjustment",
+      "leak_testing",
+      "relief_testing"
+    ],
+    "certified_biz_steps": [
+      "assembling",
+      "inspecting"
+    ]
+  },
+  "social": {
+    "maximum_authority": "entity_identity",
+    "deduplicate_repost_clusters": true,
+    "blocked_is_absence": false
+  }
+}

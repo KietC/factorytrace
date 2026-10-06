@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/factorytrace/candidate.v2.schema.json",
+  "title": "Factory candidate v2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "display_name",
+    "target_processes",
+    "entities",
+    "evidence",
+    "red_flags",
+    "verified_mainland_site"
+  ],
+  "properties": {
+    "schema": {"const": 2},
+    "schema_version": {"const": 2},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "display_name": {"type": "string"},
+    "target_processes": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "entities": {"type": "object"},
+    "parties": {"type": "array", "items": {"type": "object"}},
+    "sites": {"type": "array", "items": {"type": "object"}},
+    "product_identity": {"type": "object"},
+    "process_scope": {"type": "array", "items": {"type": "object"}},
+    "claims": {"type": "array", "items": {"type": "object"}},
+    "source_artifacts": {"type": "array", "items": {"type": "object"}},
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["hypothesis_id", "statement"],
+        "properties": {
+          "hypothesis_id": {"enum": ["H1", "H2", "H3", "H4", "H5"]},
+          "statement": {"type": "string", "minLength": 1},
+          "state": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "cert_records": {"type": "array", "items": {"type": "object"}},
+    "supply_events": {"type": "array", "items": {"type": "object"}},
+    "social_accounts": {"type": "array", "items": {"type": "object"}},
+    "social_posts": {"type": "array", "items": {"type": "object"}},
+    "access_receipts": {"type": "array", "items": {"type": "object"}},
+    "contacts": {"type": "array", "items": {"type": "object"}},
+    "verified_mainland_site": {
+      "oneOf": [{"type": "boolean"}, {"const": "unknown"}]
+    },
+    "responsibility_chain_explanation": {"type": "string"},
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "evidence.v2.schema.json"}
+    },
+    "red_flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "severity", "status"],
+        "properties": {
+          "type": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["low", "medium", "high", "critical"]},
+          "status": {"enum": ["open", "resolved", "accepted"]}
+        },
+        "additionalProperties": true
+      }
+    },
+    "legacy_manual_score": {"type": "object"},
+    "migration": {"type": "object"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,33 @@
+{
+  "schema": 2,
+  "generator": "scripts/generate_ocr_probes.py",
+  "generation": {
+    "font_name": "NotoSansCJKsc-Regular.otf",
+    "font_sha256": "2C76254F6FC379FDDFCE0A7E84FB5385BB135D3E399294F6EEB6680D0365B74B",
+    "font_index": 0,
+    "pillow_version": "12.3.0",
+    "image_mode": "L",
+    "canvas": [
+      1600,
+      280
+    ],
+    "font_size": 96,
+    "text_origin": [
+      45,
+      55
+    ],
+    "stroke_width": 1,
+    "background": 255,
+    "foreground": 0
+  },
+  "files": {
+    "chi_sim_probe.png": {
+      "text": "工厂生产 316 不锈钢",
+      "sha256": "448A7CFCD3978A4944EF3461BDD94C04CCC200D810991AE8E7EB31E94F30B58E"
+    },
+    "chi_tra_probe.png": {
+      "text": "工廠生產 316 不鏽鋼",
+      "sha256": "65318DC945FBEA4EB5E099C7ED34BEECA081B45435186F72F299B13FEB9AA014"
+    }
+  }
+}

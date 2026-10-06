@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/factorytrace/evidence.schema.json",
+  "title": "Factory trace evidence item",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "dimension",
+    "stance",
+    "strength",
+    "source_class",
+    "independence_group",
+    "entity_bind",
+    "site_bind",
+    "sku_bind",
+    "process",
+    "captured_at_utc",
+    "observed_fact",
+    "limitations",
+    "review_status"
+  ],
+  "properties": {
+    "evidence_id": {"type": "string", "minLength": 1},
+    "claim_id": {"type": "string"},
+    "role": {"type": "string"},
+    "component": {"type": "string"},
+    "legal_entity": {"type": "string"},
+    "physical_site": {"type": "string"},
+    "exact_sku_or_revision": {"type": "string"},
+    "batch_id": {"type": "string"},
+    "process": {
+      "enum": [
+        "tooling",
+        "deep_draw",
+        "stamping",
+        "trimming",
+        "punching",
+        "welding",
+        "polishing",
+        "component_manufacture",
+        "assembly",
+        "test",
+        "pack",
+        "unknown"
+      ]
+    },
+    "dimension": {
+      "enum": [
+        "entity_chain",
+        "physical_site_process",
+        "exact_sku_process",
+        "commercial_batch_chain",
+        "certification_manufacturing_site",
+        "independent_corroboration"
+      ]
+    },
+    "stance": {"enum": ["support", "contradict", "neutral", "absence"]},
+    "strength": {"enum": ["direct", "strong", "supporting", "lead"]},
+    "source_class": {
+      "enum": [
+        "certifier",
+        "government",
+        "buyer_document",
+        "independent_audit",
+        "supplier_live",
+        "logistics",
+        "trade_data",
+        "media",
+        "platform",
+        "self_published",
+        "search_snippet"
+      ]
+    },
+    "independence_group": {"type": "string", "minLength": 1},
+    "entity_bind": {"enum": ["exact", "partial", "family", "similar", "none"]},
+    "site_bind": {"enum": ["exact", "partial", "family", "similar", "none"]},
+    "sku_bind": {"enum": ["exact", "partial", "family", "similar", "none"]},
+    "source_url": {"type": "string"},
+    "source_title": {"type": "string"},
+    "issuer": {"type": "string"},
+    "published_at_utc": {"type": ["string", "null"], "format": "date-time"},
+    "captured_at_utc": {"type": "string", "format": "date-time"},
+    "local_path": {"type": "string"},
+    "sha256": {
+      "type": "string",
+      "pattern": "^$|^[A-Fa-f0-9]{64}$"
+    },
+    "observed_fact": {"type": "string", "minLength": 1},
+    "inference": {"type": "string"},
+    "quoted_text": {"type": "string"},
+    "extraction_method": {"type": "string"},
+    "tool_receipt_id": {"type": "string"},
+    "limitations": {"type": "string", "minLength": 1},
+    "review_status": {
+      "enum": ["unreviewed", "reviewed", "accepted", "rejected", "superseded"]
+    },
+    "reviewer": {"type": "string"},
+    "last_verified_utc": {"type": ["string", "null"], "format": "date-time"}
+  },
+  "additionalProperties": true
+}

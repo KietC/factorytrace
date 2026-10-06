@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/factorytrace/claim.schema.json",
+  "title": "Evidence-backed claim",
+  "type": "object",
+  "required": [
+    "claim_id",
+    "candidate_id",
+    "claim_text",
+    "role",
+    "component",
+    "physical_site",
+    "process",
+    "fact_or_inference",
+    "source_ids",
+    "limitations",
+    "last_verified_utc"
+  ],
+  "properties": {
+    "claim_id": {"type": "string", "minLength": 1},
+    "candidate_id": {"type": "string"},
+    "claim_text": {"type": "string", "minLength": 1},
+    "role": {"type": "string", "minLength": 1},
+    "component": {"type": "string", "minLength": 1},
+    "legal_entity": {"type": "string"},
+    "physical_site": {"type": "string"},
+    "exact_sku_or_revision": {"type": "string"},
+    "batch_id": {"type": "string"},
+    "process": {"type": "string", "minLength": 1},
+    "fact_or_inference": {"enum": ["fact", "claim", "inference"]},
+    "source_ids": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "contradictions": {"type": "array", "items": {"type": "string"}},
+    "next_disconfirming_test": {"type": "string"},
+    "review_status": {
+      "enum": ["draft", "reviewed", "accepted", "rejected", "superseded"]
+    },
+    "last_verified_utc": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/factorytrace/product_profile.schema.json",
+  "title": "Target product profile",
+  "type": "object",
+  "required": [
+    "schema",
+    "target_id",
+    "brand_policy",
+    "features_zh",
+    "features_en",
+    "processes_zh",
+    "processes_en"
+  ],
+  "properties": {
+    "schema": {"const": 1},
+    "target_id": {"type": "string", "minLength": 1},
+    "category_zh": {"type": "string"},
+    "category_en": {"type": "string"},
+    "brand_policy": {"enum": ["ignore", "lead_only", "usable_with_contract"]},
+    "visible_brands": {"type": "array", "items": {"type": "string"}},
+    "exact_models": {"type": "array", "items": {"type": "string"}},
+    "measurements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "measurement_id",
+          "feature",
+          "value",
+          "unit",
+          "status",
+          "source_type",
+          "use_for_search",
+          "search_text"
+        ],
+        "properties": {
+          "measurement_id": {"type": "string", "minLength": 1},
+          "feature": {"type": "string", "minLength": 1},
+          "value": {
+            "oneOf": [
+              {"type": "number"},
+              {"type": "array", "items": {"type": "number"}, "minItems": 1}
+            ]
+          },
+          "unit": {"type": "string", "minLength": 1},
+          "tolerance_mm": {"type": ["number", "null"]},
+          "status": {
+            "enum": [
+              "measured",
+              "documented",
+              "supplier_claim",
+              "candidate",
+              "conflict",
+              "rejected",
+              "unknown"
+            ]
+          },
+          "source_type": {"type": "string"},
+          "evidence_id": {"type": ["string", "null"]},
+          "use_for_search": {"type": "boolean"},
+          "search_text": {"type": "string"},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "dimensions_mm": {"type": "object"},
+    "dimension_strings": {"type": "array", "items": {"type": "string"}},
+    "materials": {"type": "array", "items": {"type": "string"}},
+    "features_zh": {"type": "array", "items": {"type": "string"}},
+    "features_en": {"type": "array", "items": {"type": "string"}},
+    "parts_zh": {"type": "array", "items": {"type": "string"}},
+    "parts_en": {"type": "array", "items": {"type": "string"}},
+    "processes_zh": {"type": "array", "items": {"type": "string"}},
+    "processes_en": {"type": "array", "items": {"type": "string"}},
+    "certification_ids": {"type": "array", "items": {"type": "string"}},
+    "hs_candidates": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

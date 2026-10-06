@@ -1,0 +1,18 @@
+# Exact installer/build/runtime versions used for the 2.0.0 full-stack snapshot.
+# Pass --flexible to bootstrap scripts to use the supported range in pyproject.toml.
+pip==26.1.2
+Pillow==12.3.0
+setuptools==83.0.0
+attrs==26.1.0
+et_xmlfile==2.0.0
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+lxml==6.1.1
+numpy==2.4.6
+opencv-python-headless==4.14.0.94
+openpyxl==3.1.5
+python-docx==1.2.0
+PyYAML==6.0.3
+referencing==0.37.0
+rpds-py==2026.6.3
+typing_extensions==4.16.0

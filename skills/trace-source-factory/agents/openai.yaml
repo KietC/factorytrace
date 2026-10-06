@@ -1,0 +1,5 @@
+# English first, then Chinese / 英文在前，中文在后。
+interface:
+  display_name: "Factory source tracing / 源头厂家溯源"
+  short_description: "Trace factories with evidence / 证据驱动的源头厂家溯源"
+  default_prompt: "Use $trace-source-factory to trace the actual manufacturer using images, certification, process and supply-chain evidence. / 使用 $trace-source-factory 结合图片、认证、工艺与供应链证据追溯实际制造商，输出可审计结论。"

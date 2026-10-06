@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/factorytrace/assessment.v2.schema.json",
+  "title": "Factory trace multi-axis assessment v2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "trace_stage",
+    "analytic_confidence",
+    "evidence_sufficiency_score",
+    "capability_fit_score",
+    "certification_state",
+    "verification_priority",
+    "procurement_utility",
+    "procurement_policy",
+    "ach",
+    "confidence_index",
+    "confidence_index_deprecated",
+    "confidence_notice",
+    "computed_at_utc"
+  ],
+  "properties": {
+    "schema": {"const": 2},
+    "schema_version": {"const": 2},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "display_name": {"type": "string"},
+    "target_processes": {"type": "array", "items": {"type": "string"}},
+    "trace_stage": {
+      "enum": [
+        "S0_UNLINKED",
+        "S1_EXACT_PRODUCT_MATCH",
+        "S2_AUTHORIZED_SITE",
+        "S3_PROCESS_CONFIRMED",
+        "S4_BATCH_LINKED"
+      ]
+    },
+    "trace_stage_checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "analytic_confidence": {"enum": ["LOW", "MODERATE", "HIGH"]},
+    "analytic_confidence_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "analytic_confidence_basis": {"type": "array", "items": {"type": "string"}},
+    "evidence_sufficiency_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "capability_fit_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "capability_fit_details": {"type": "object"},
+    "certification_state": {
+      "type": "object",
+      "required": ["ul", "watermark", "dual_certification_gate"],
+      "properties": {
+        "ul": {"$ref": "#/$defs/schemeState"},
+        "watermark": {"$ref": "#/$defs/schemeState"},
+        "dual_certification_gate": {"enum": ["PASS", "FAIL", "OPEN"]},
+        "dual_gate_notice": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "verification_priority": {"type": "number", "minimum": 0, "maximum": 100},
+    "verification_priority_band": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+    "verification_priority_drivers": {"type": "array", "items": {"type": "string"}},
+    "procurement_utility": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+    "procurement_policy": {
+      "type": "object",
+      "required": ["eligible_for_mainland_rank", "verified_mainland_site", "notice"],
+      "properties": {
+        "eligible_for_mainland_rank": {"type": "boolean"},
+        "verified_mainland_site": {
+          "oneOf": [{"type": "boolean"}, {"const": "unknown"}]
+        },
+        "buyer_input_count": {"type": "integer", "minimum": 0},
+        "inputs_complete": {"type": "boolean"},
+        "notice": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    },
+    "ach": {
+      "type": "object",
+      "required": ["method", "hypotheses", "leading_hypotheses", "independent_source_clusters"],
+      "properties": {
+        "method": {"type": "string", "minLength": 1},
+        "hypotheses": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["id", "statement", "support_clusters", "contradiction_clusters", "net_consistency"],
+            "properties": {
+              "id": {"enum": ["H1", "H2", "H3", "H4", "H5"]},
+              "statement": {"type": "string", "minLength": 1},
+              "support_clusters": {"type": "array", "items": {"type": "string"}},
+              "contradiction_clusters": {"type": "array", "items": {"type": "string"}},
+              "net_consistency": {"type": "number"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "leading_hypotheses": {
+          "type": "array",
+          "items": {"enum": ["H1", "H2", "H3", "H4", "H5"]}
+        },
+        "independent_source_clusters": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": true
+    },
+    "components": {"type": "object"},
+    "raw_score": {"type": "number"},
+    "caps": {"type": "array"},
+    "hard_gates": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "hard_gates_passed": {"type": "integer", "minimum": 0},
+    "hard_gates_total": {"type": "integer", "minimum": 0},
+    "verdict": {"type": "string"},
+    "confidence_index": {"type": "number", "minimum": 0, "maximum": 100},
+    "confidence_index_deprecated": {"const": true},
+    "confidence_notice": {
+      "type": "string",
+      "pattern": "(?i)(deprecated).*(not).*(probability)"
+    },
+    "source_attribution_notice": {"type": "string"},
+    "computed_at_utc": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "schemeState": {
+      "type": "object",
+      "required": [
+        "state",
+        "active",
+        "exact_product",
+        "authorized_manufacturing_site",
+        "complete_product",
+        "record_present",
+        "notice"
+      ],
+      "properties": {
+        "state": {"type": "string", "minLength": 1},
+        "active": {"type": ["boolean", "null"]},
+        "exact_product": {"type": ["boolean", "null"]},
+        "authorized_manufacturing_site": {"type": ["boolean", "null"]},
+        "complete_product": {"type": ["boolean", "null"]},
+        "record_present": {"type": "boolean"},
+        "record_id": {"type": "string"},
+        "notice": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

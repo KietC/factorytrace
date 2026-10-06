@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "coordinate_system": "pixels in the EXIF-corrected source image",
+  "crops": [],
+  "masks": [],
+  "recommended_crop_names": [
+    "whole_body",
+    "underside",
+    "corner_and_rim",
+    "hole_pattern",
+    "perforated_cover",
+    "actuator",
+    "valve_and_elbow",
+    "label_and_batch"
+  ],
+  "example_only": {
+    "crop": {
+      "name": "hole_pattern",
+      "xywh": [100, 200, 300, 220],
+      "role": "non-adjustable hole geometry"
+    },
+    "mask": {
+      "name": "irrelevant_brand",
+      "xywh": [20, 20, 160, 60]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "memory_id": "factory-trace-core-rules",
+  "scope": "Reusable across products, suppliers, countries and cases",
+  "rules": [
+    {"id": "R01", "rule": "Separate seller, contracting/payment entity, legal manufacturer, physical site, exact SKU or batch, and target process."},
+    {"id": "R02", "rule": "Represent conclusions as role x component x site/process claims."},
+    {"id": "R03", "rule": "Image matches, brands, listings, patents, licence holders and shippers are leads, not manufacturing proof."},
+    {"id": "R04", "rule": "Not publicly found never means nonexistent or not manufactured."},
+    {"id": "R05", "rule": "Deduplicate common-source evidence by independence group."},
+    {"id": "R06", "rule": "Preserve originals and lineage before transformation."},
+    {"id": "R07", "rule": "Bind capability evidence to exact site, SKU/batch and process."},
+    {"id": "R08", "rule": "AI and visual similarity outputs are hypothesis generators and are not evidence eligible."},
+    {"id": "R09", "rule": "ESS is not a statistically calibrated probability."},
+    {"id": "R10", "rule": "Only a fresh confirmed audit permits a confirmed target-process manufacturer statement."},
+    {"id": "R11", "rule": "Parallel lanes must use an exclusive write root and one reconciler for canonical merge."}
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "schema": 2,
+  "events": [],
+  "certifications": [],
+  "terminal_object_ids": [],
+  "meaning": "Events are reported assertions and do not authenticate the submitter or replace an independent site audit."
+}

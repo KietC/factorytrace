@@ -1,0 +1,46 @@
+# Generated runtimes and builds
+**/.venv/
+**/.build-venv/
+**/__pycache__/
+*.py[cod]
+**/*.egg-info/
+**/.pytest_cache/
+**/build/
+**/dist/
+**/wheelhouse/
+*.whl
+*.zip
+*.zip.sha256
+*.tar.gz
+
+# Case data, private evidence and host receipts
+**/cases/
+**/case_lessons/
+**/backup/
+**/output/
+**/smoke_cases/
+**/evidence/
+**/artifacts/
+**/logs/
+**/candidates/
+**/_restricted/
+**/_local_deploy/
+**/environment.current.json
+**/verification*.json
+**/wheel-smoke*.json
+**/SOURCES_AND_PROVENANCE.md
+**/ENVIRONMENT_CHANGE_RECEIPT*
+**/DEPLOYMENT_RECEIPT*
+**/LEGACY_CASE_*
+
+# Secrets and browser state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*cookies*.json
+*storage_state*.json
+*.har
+
+# New case working directories must stay outside the repository.

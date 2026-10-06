@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "project": "notofonts/noto-cjk",
+  "repository": "https://github.com/notofonts/noto-cjk",
+  "revision": "f8d157532fbfaeda587e826d4cd5b21a49186f7c",
+  "license": "OFL-1.1",
+  "upstream_path": "Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf",
+  "files": {
+    "NotoSansCJKsc-Regular.otf": "2C76254F6FC379FDDFCE0A7E84FB5385BB135D3E399294F6EEB6680D0365B74B",
+    "LICENSE": "6A73F9541C2DE74158C0E7CF6B0A58EF774F5A780BF191F2D7EC9CC53EFE2BF2"
+  }
+}

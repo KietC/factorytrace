@@ -1,0 +1,13 @@
+# Stable text endings across platforms / 跨平台保持文本换行稳定。
+* text=auto eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.ps1 text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.png binary
+*.traineddata binary
+*.otf binary

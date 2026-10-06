@@ -1,0 +1,11 @@
+{
+  "schema": 2,
+  "receipt_id": "ACCESS-001",
+  "url": "https://example.invalid/public-page",
+  "platform": "replace_me",
+  "access_status": "opened_unverified",
+  "captured_at_utc": "2026-01-01T00:00:00Z",
+  "screenshot_path": "",
+  "download_path": "",
+  "notes": "Blocked/login/captcha states are access facts only and never absence evidence."
+}

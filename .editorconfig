@@ -1,0 +1,16 @@
+# Optional editor hints; Git attributes and release checks remain authoritative.
+# 可选编辑器提示；发布仍以 Git 属性与校验结果为准。
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.md]
+indent_size = 2

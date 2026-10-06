@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "cycle_id": "CYCLE-001",
+  "started_at_utc": null,
+  "completed_at_utc": null,
+  "target_claims": [],
+  "phase_a_researcher": {
+    "new_evidence_ids": [],
+    "new_independence_groups": [],
+    "new_candidate_ids": [],
+    "failed_query_ids": []
+  },
+  "phase_b_skeptic": {
+    "alternative_explanations": [],
+    "new_contradiction_ids": [],
+    "strongest_counterevidence_id": null
+  },
+  "phase_c_reconciler": {
+    "resolved_contradiction_ids": [],
+    "open_contradiction_ids": [],
+    "scores_before": {},
+    "scores_after": {},
+    "decision": "continue",
+    "next_disconfirming_action": null
+  },
+  "metrics": {
+    "new_evidence_count": 0,
+    "new_independence_group_count": 0,
+    "queries_attempted": 0,
+    "queries_failed": 0
+  },
+  "stop_checks": {
+    "two_cycles_without_new_independent_evidence": false,
+    "only_duplicate_marketing_material_remains": false,
+    "external_response_or_site_visit_required": false
+  }
+}

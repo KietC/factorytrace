@@ -1,0 +1,1 @@
+run_id,cycle_id,action_id,query_id,engine,input_variant,query,searched_at_utc,status,failure_reason,http_or_tool_status,retry_count,next_retry_at_utc,result_url,result_type,candidate_id,evidence_id,tool_receipt_path,notes

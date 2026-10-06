@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "case_id": "REPLACE_CASE_ID",
+  "items": [
+    {
+      "item_id": "P0-01",
+      "label": "Original full-resolution product overview",
+      "required_from": "discovery",
+      "status": "missing",
+      "file_required": true,
+      "paths": [],
+      "min_long_edge_px": 2000,
+      "source_or_evidence_id": "",
+      "notes": "Not a chat-window screenshot or re-saved thumbnail."
+    },
+    {
+      "item_id": "P0-02",
+      "label": "Original source, URL or provider and received time",
+      "required_from": "discovery",
+      "status": "missing",
+      "file_required": false,
+      "paths": [],
+      "source_or_evidence_id": "",
+      "notes": ""
+    },
+    {
+      "item_id": "P0-03",
+      "label": "Known model, dimension or component boundary",
+      "required_from": "discovery",
+      "status": "missing",
+      "file_required": false,
+      "paths": ["work/product_profile.json"],
+      "source_or_evidence_id": "",
+      "notes": ""
+    },
+    {
+      "item_id": "P1-01",
+      "label": "Six orthogonal sides and four 45-degree views",
+      "required_from": "comparison",
+      "status": "missing",
+      "file_required": true,
+      "paths": [],
+      "source_or_evidence_id": "",
+      "notes": ""
+    },
+    {
+      "item_id": "P1-02",
+      "label": "Dimensions, hole positions, radii, rim, thickness and weight",
+      "required_from": "comparison",
+      "status": "missing",
+      "file_required": true,
+      "paths": [],
+      "source_or_evidence_id": "",
+      "notes": ""
+    },
+    {
+      "item_id": "P1-03",
+      "label": "Components, markings, packaging and batch labels",
+      "required_from": "comparison",
+      "status": "missing",
+      "file_required": true,
+      "paths": [],
+      "source_or_evidence_id": "",
+      "notes": ""
+    },
+    {
+      "item_id": "P2-01",
+      "label": "Exact factory address and continuous random-challenge production video",
+      "required_from": "process",
+      "status": "missing",
+      "file_required": true,
+      "paths": [],
+      "source_or_evidence_id": "",
+      "notes": ""
+    },
+    {
+      "item_id": "P2-02",
+      "label": "Equipment and mold plates, material, work order and QC batch",
+      "required_from": "process",
+      "status": "missing",
+      "file_required": true,
+      "paths": [],
+      "source_or_evidence_id": "",
+      "notes": ""
+    },
+    {
+      "item_id": "P3-01",
+      "label": "Independent audit, CAB, buyer, COO or batch-chain evidence",
+      "required_from": "confirmed",
+      "status": "missing",
+      "file_required": true,
+      "paths": [],
+      "source_or_evidence_id": "",
+      "notes": ""
+    },
+    {
+      "item_id": "P3-02",
+      "label": "Sample mold fingerprint or controlled on-site verification",
+      "required_from": "confirmed",
+      "status": "missing",
+      "file_required": true,
+      "paths": [],
+      "source_or_evidence_id": "",
+      "notes": ""
+    }
+  ]
+}

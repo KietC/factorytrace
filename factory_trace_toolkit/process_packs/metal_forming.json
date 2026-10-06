@@ -1,0 +1,53 @@
+{
+  "schema": "factorytrace.process-pack.v2",
+  "pack_id": "metal_forming",
+  "version": 1,
+  "description": "Metal-forming and tooling trace pack for material heat, tooling revision, work order, forming, trimming and machining lineage.",
+  "extends": [],
+  "required_processes": [
+    "material_receiving",
+    "forming",
+    "trimming",
+    "machining",
+    "in_process_inspection"
+  ],
+  "required_evidence": [
+    "material_heat_record",
+    "tooling_record",
+    "work_order",
+    "in_process_inspection_record",
+    "batch_trace"
+  ],
+  "required_photos": [
+    "raw_material_heat_mark",
+    "tooling_identifier",
+    "forming_machine_nameplate",
+    "part_before_after_forming"
+  ],
+  "required_documents": [
+    "material_certificate",
+    "tooling_register",
+    "production_work_order",
+    "inspection_record"
+  ],
+  "certification": {
+    "mode": "all",
+    "schemes": [],
+    "hard_gates": []
+  },
+  "events": {
+    "required_biz_steps": [
+      "receiving",
+      "forming",
+      "trimming",
+      "machining",
+      "inspecting"
+    ],
+    "certified_biz_steps": []
+  },
+  "social": {
+    "maximum_authority": "entity_identity",
+    "deduplicate_repost_clusters": true,
+    "blocked_is_absence": false
+  }
+}

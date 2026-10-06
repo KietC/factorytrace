@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/factorytrace/candidate.schema.json",
+  "title": "Factory candidate",
+  "type": "object",
+  "required": [
+    "schema",
+    "candidate_id",
+    "display_name",
+    "target_processes",
+    "entities",
+    "responsibility_chain_explanation",
+    "evidence",
+    "red_flags"
+  ],
+  "properties": {
+    "schema": {"const": 1},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "display_name": {"type": "string"},
+    "target_processes": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "entities": {
+      "type": "object",
+      "required": [
+        "contracting_entity",
+        "payment_entity",
+        "manufacturer_entity",
+        "manufacturing_sites",
+        "exact_sku"
+      ],
+      "properties": {
+        "contracting_entity": {"type": "string"},
+        "payment_entity": {"type": "string"},
+        "manufacturer_entity": {"type": "string"},
+        "manufacturing_sites": {"type": "array", "items": {"type": "string"}},
+        "exact_sku": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "responsibility_chain_explanation": {"type": "string"},
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "evidence.schema.json"}
+    },
+    "red_flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "severity", "status"],
+        "properties": {
+          "type": {"type": "string"},
+          "severity": {"enum": ["low", "medium", "high", "critical"]},
+          "status": {"enum": ["open", "resolved", "accepted"]}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

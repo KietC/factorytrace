@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "target_id": "TARGET-001",
+  "category_zh": "虚构演示阀壳",
+  "category_en": "synthetic valve housing",
+  "brand_policy": "ignore",
+  "visible_brands": [],
+  "exact_models": ["TEST-ONLY-NOT-A-REAL-SKU"],
+  "measurements": [
+    {
+      "measurement_id": "SYNTHETIC-MEAS-001",
+      "feature": "outer_size",
+      "value": [100, 60, 20],
+      "unit": "mm",
+      "tolerance_mm": null,
+      "status": "candidate",
+      "source_type": "synthetic_example_not_evidence",
+      "evidence_id": null,
+      "use_for_search": false,
+      "search_text": "100×60×20",
+      "notes": "Fictional demonstration only. Replace with independently measured/documented values."
+    }
+  ],
+  "dimensions_mm": {},
+  "dimension_strings": [],
+  "materials": [],
+  "features_zh": [
+    "演示侧孔",
+    "演示安装凸缘"
+  ],
+  "features_en": [
+    "synthetic side port",
+    "synthetic mounting flange"
+  ],
+  "parts_zh": [
+    "演示壳体"
+  ],
+  "parts_en": [
+    "synthetic housing"
+  ],
+  "processes_zh": [
+    "开模",
+    "机加工"
+  ],
+  "processes_en": [
+    "tooling",
+    "machining"
+  ],
+  "certification_ids": [],
+  "hs_candidates": [],
+  "notes": "All values are synthetic test data, not a product, material, certification, tariff or supplier claim. Replace every field before a real investigation."
+}

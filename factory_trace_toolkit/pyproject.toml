@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools==83.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "factory-trace-toolkit"
+version = "2.0.0"
+description = "Evidence-first, cross-platform source-factory tracing toolkit"
+readme = "README.md"
+requires-python = ">=3.11,<3.15"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+  "Pillow>=10.0,<13",
+  "jsonschema>=4.23,<5",
+]
+
+[project.optional-dependencies]
+reports = [
+  "openpyxl>=3.1,<4",
+  "python-docx>=1.1,<2",
+]
+media = [
+  "opencv-python-headless>=4.10,<5",
+]
+packs = [
+  "PyYAML>=6.0,<7",
+]
+full = [
+  "openpyxl>=3.1,<4",
+  "python-docx>=1.1,<2",
+  "opencv-python-headless>=4.10,<5",
+  "PyYAML>=6.0,<7",
+]
+
+[project.scripts]
+factorytrace = "factorytrace.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.data-files]
+"share/factory-trace-toolkit/schemas" = ["schemas/*.json"]
+"share/factory-trace-toolkit/templates" = [
+  "templates/*.json",
+  "templates/*.csv",
+  "templates/*.md",
+]
+"share/factory-trace-toolkit/process_packs" = [
+  "process_packs/*.json",
+]
+"share/factory-trace-toolkit/tessdata" = [
+  "resources/tessdata/*.traineddata",
+  "resources/tessdata/LICENSE",
+  "resources/tessdata/MANIFEST.json",
+]
+"share/factory-trace-toolkit/ocr_probes" = [
+  "resources/ocr_probes/*.png",
+  "resources/ocr_probes/MANIFEST.json",
+]
+"share/factory-trace-toolkit/fonts" = [
+  "resources/fonts/*.otf",
+  "resources/fonts/LICENSE",
+  "resources/fonts/MANIFEST.json",
+]

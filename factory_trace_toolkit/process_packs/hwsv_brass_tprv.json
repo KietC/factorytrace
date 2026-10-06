@@ -1,0 +1,93 @@
+{
+  "schema": "factorytrace.process-pack.v2",
+  "pack_id": "hwsv_brass_tprv",
+  "version": 1,
+  "description": "Brass hot-water pressure/temperature relief valve pack binding tooling, hot forging, machining, controlled assembly, calibration, certification and batch release.",
+  "extends": [
+    "sanitary_valve",
+    "metal_forming"
+  ],
+  "required_processes": [
+    "brass_bar_cutting",
+    "brass_preheating",
+    "hot_forging",
+    "flash_trimming",
+    "die_and_tooling_control",
+    "cnc_thread_machining",
+    "valve_seat_machining",
+    "temperature_probe_subassembly",
+    "set_pressure_adjustment",
+    "temperature_actuation_test",
+    "leak_test",
+    "pressure_temperature_relief_test",
+    "final_inspection",
+    "batch_release"
+  ],
+  "required_evidence": [
+    "brass_material_certificate",
+    "forging_batch_record",
+    "die_asset_and_revision_record",
+    "machining_inspection_record",
+    "controlled_bom",
+    "instrument_calibration_record",
+    "set_pressure_record",
+    "temperature_actuation_result",
+    "leak_test_result",
+    "relief_test_result",
+    "batch_release_record"
+  ],
+  "required_photos": [
+    "brass_bar_heat_and_lot_mark",
+    "forging_press_nameplate",
+    "die_identifier_and_cavity",
+    "as_forged_body_before_machining",
+    "machined_threads_and_valve_seat",
+    "temperature_probe_and_relief_mechanism",
+    "test_rig_with_instrument_ids",
+    "model_rating_and_batch_marking"
+  ],
+  "required_documents": [
+    "watermark_certificate_schedule",
+    "ul_product_iq_record",
+    "ul_fus_or_manufacturing_location_record",
+    "factory_authorization",
+    "controlled_bom",
+    "die_asset_register",
+    "brass_material_certificate",
+    "calibration_certificates",
+    "batch_test_report",
+    "batch_release_record"
+  ],
+  "certification": {
+    "mode": "all",
+    "schemes": [
+      "WaterMark",
+      "UL"
+    ],
+    "hard_gates": []
+  },
+  "events": {
+    "required_biz_steps": [
+      "receiving",
+      "hot_forging",
+      "machining",
+      "assembling",
+      "set_pressure_adjustment",
+      "temperature_actuation_testing",
+      "leak_testing",
+      "relief_testing",
+      "inspecting",
+      "packing",
+      "shipping"
+    ],
+    "certified_biz_steps": [
+      "assembling",
+      "inspecting"
+    ]
+  },
+  "social": {
+    "maximum_authority": "entity_identity",
+    "deduplicate_repost_clusters": true,
+    "blocked_is_absence": false
+  }
+}

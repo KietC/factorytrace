@@ -1,0 +1,1 @@
+timestamp_utc,run_id,mode,provider_or_runtime,model_id,model_revision,quantization,endpoint_class,prompt_id,input_artifact_ids,output_path,human_verified,evidence_eligible,notes

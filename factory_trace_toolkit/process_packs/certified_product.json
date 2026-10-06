@@ -1,0 +1,59 @@
+{
+  "schema": "factorytrace.process-pack.v2",
+  "pack_id": "certified_product",
+  "version": 1,
+  "description": "Generic exact-product certification, authorized-site and batch-release evidence pack.",
+  "extends": [],
+  "required_processes": [
+    "final_inspection",
+    "batch_release"
+  ],
+  "required_evidence": [
+    "official_certification_record",
+    "authorized_site_record",
+    "batch_release_record"
+  ],
+  "required_photos": [
+    "product_marking",
+    "model_rating_plate",
+    "batch_code"
+  ],
+  "required_documents": [
+    "certificate_schedule",
+    "factory_authorization",
+    "batch_test_report"
+  ],
+  "certification": {
+    "mode": "all",
+    "schemes": [],
+    "hard_gates": [
+      "exact_model",
+      "exact_material",
+      "exact_ratings",
+      "exact_certification_type",
+      "active_status",
+      "certificate_valid_at",
+      "authorized_site_exact",
+      "site_authorization_current",
+      "explicit_manufacturer_role",
+      "manufacturer_site_binding",
+      "single_scope_conjunction"
+    ]
+  },
+  "events": {
+    "required_biz_steps": [
+      "receiving",
+      "inspecting",
+      "packing",
+      "shipping"
+    ],
+    "certified_biz_steps": [
+      "inspecting"
+    ]
+  },
+  "social": {
+    "maximum_authority": "entity_identity",
+    "deduplicate_repost_clusters": true,
+    "blocked_is_absence": false
+  }
+}

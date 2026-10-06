@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/trace-source-factory/claim-record.schema.json",
+  "title": "Atomic source-factory claim",
+  "type": "object",
+  "required": ["claim_id", "candidate_id", "statement", "status", "evidence_ids", "bindings"],
+  "properties": {
+    "claim_id": {"type": "string", "minLength": 1},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "statement": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": ["CONFIRMED", "SUPPORTED", "INFERENCE", "LEAD", "CONTRADICTED", "UNRESOLVED", "HOLD"]
+    },
+    "evidence_ids": {"type": "array", "items": {"type": "string"}},
+    "contradiction_ids": {"type": "array", "items": {"type": "string"}},
+    "bindings": {
+      "type": "object",
+      "required": ["entity", "site", "sku", "process"],
+      "properties": {
+        "entity": {"type": ["string", "null"]},
+        "site": {"type": ["string", "null"]},
+        "sku": {"type": ["string", "null"]},
+        "process": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "reviewed_at_utc": {"type": ["string", "null"], "format": "date-time"}
+  },
+  "additionalProperties": true
+}

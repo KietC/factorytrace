@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/factorytrace/case.schema.json",
+  "title": "Factory trace case",
+  "type": "object",
+  "required": [
+    "schema",
+    "case_id",
+    "objective",
+    "created_at_utc",
+    "time_zone",
+    "status"
+  ],
+  "properties": {
+    "schema": {"const": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "name": {"type": "string"},
+    "objective": {"type": "string", "minLength": 1},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "time_zone": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": [
+        "open",
+        "research",
+        "operational",
+        "paused",
+        "superseded",
+        "confirmed",
+        "closed"
+      ]
+    },
+    "decision_rule": {"type": "string"},
+    "last_audit_stage": {
+      "enum": ["research", "operational", "confirmed"]
+    },
+    "last_audit_at_utc": {"type": "string", "format": "date-time"},
+    "last_audit_path": {"type": "string"}
+  },
+  "additionalProperties": true
+}

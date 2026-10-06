@@ -1,4 +1,4 @@
-# FactoryTrace — Evidence-First Manufacturer Tracing
+# FactoryTrace — Find the Manufacturer Behind a Product
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python: 3.11–3.14](https://img.shields.io/badge/Python-3.11%E2%80%933.14-blue.svg)](factory_trace_toolkit/pyproject.toml)
@@ -7,14 +7,46 @@
 
 ## English
 
-Trace the **actual manufacturer, production site, tooling owner, and target process** behind a product—not merely the storefront selling a similar image.
+Investigate **who makes a product, where it is made, and what the available evidence supports**. Start with product photos, specifications or documents; organize manufacturer candidates, compare details, review certification and production records, and generate a report with source links and unresolved questions.
 
-FactoryTrace combines a local Python toolkit with a reusable agent Skill. It preserves source artifacts, structures claims and contradictions, checks product/site/certification bindings, and generates auditable reports. It is a research workflow and evidence organizer, not a factory database or an automatic supplier-confirmation engine.
+FactoryTrace is a local Python toolkit plus an optional agent Skill. You or a research agent gather and review the evidence; the toolkit keeps it organized and checks the recorded relationships. It is not a preloaded factory database or an automatic supplier-confirmation service.
+
+### When to use it
+
+- **Factory or trader?** Check whether a seller's company, workshop and production evidence support its manufacturing claim.
+- **Looking for an OEM/ODM source?** Compare candidate companies against one exact product and the manufacturing work you need.
+- **Reviewing a certificate or supplier change?** Check whether the documented model, material, ratings and authorized site still match; record gaps before drawing a conclusion.
+
+### What goes in and what comes out
+
+| You provide | You get | You still decide |
+| --- | --- | --- |
+| Product photos, dimensions, materials, labels and documents | Preserved originals, file hashes, search variants and queries | Which sources to investigate and what missing material to request |
+| Candidate companies and saved website/certification/production evidence | Candidate assessments, claim/source records and contradiction checks | Whether the source is authentic and supports the specific claim |
+| Reviewed case records | Markdown, JSON and CSV reports; optional Excel and Word reports | Whether the evidence is sufficient to identify a manufacturer |
+
+**Example:** you have a product photo and three sellers claiming to make it. Keep each seller's claims separate, compare the exact product details, record the manufacturing site and saved certificate/production evidence, then produce a report showing what supports each candidate and what remains unknown. Similar photos alone do not identify the factory.
+
+### Real platforms and their role
+
+These are named sources in the supplied research procedure, not a claim that the CLI automatically connects to or has accepted every live platform. Platform searches, logins and official verification happen through your authorized browser/search tools; saved evidence and structured records are then assessed locally.
+
+| Platform or source | Use in the workflow | Current integration boundary |
+| --- | --- | --- |
+| [WaterMark Product Search](https://watermark.abcb.gov.au/watermark-search) | Review Australian plumbing-product licence, model and status records | The [certification evaluator](factory_trace_toolkit/src/factorytrace/certification.py) checks recorded product/site scope. It does not crawl the official database or prove a supplied record authentic. |
+| [UL Product iQ](https://productiq.ulprospector.com/) | Check UL file/category, exact product and authorized-site records | Same saved-record assessment; no bundled account, automatic login or full database collection. Follow the issuer's current official entry points. |
+| 1688, Taobao and Alibaba | Find product and seller candidates, then separate selling identity from manufacturing claims | Agent/operator research using normal sessions; storefront similarity is a lead. |
+| LinkedIn, Facebook, YouTube and Instagram | Review company history, professional roles and production-media clues | The [research guide](skills/trace-source-factory/references/social-and-platform-research.md) covers these sources; no built-in social-network account or universal scraper. |
+| WeChat public accounts / Channels, Douyin and Kuaishou | Review public business posts, product history and workshop/process videos | Documented research sources; collect accessible evidence through authorized tools and record reposts/access failures. |
+| Codex-compatible agent applications | Optional guided research and tool orchestration | The supplied Skill defines the procedure. The core CLI works without an agent application, model or API key. |
+
+See [certification research](skills/trace-source-factory/references/certification-watermark-ul.md) and [platform research](skills/trace-source-factory/references/social-and-platform-research.md) for the checks and access records. The repository includes no real supplier case, login or contact book, and is not affiliated with these services.
 
 ### Contents
 
 - [Capabilities](#capabilities)
 - [Quick start](#quick-start)
+- [First local result](#first-local-result)
 - [Requirements](#requirements)
 - [Workflow](#workflow)
 - [Repository map](#repository-map)
@@ -69,6 +101,34 @@ TOOLKIT_PYTHON="$PWD/factory_trace_toolkit/.venv/bin/python"
 ```
 
 Expected: CLI help includes `init`, `ingest`, `assess`, `report`, and `audit`. Stop on errors; do not silently run another global `factorytrace` command. Cases and private environment receipts belong **outside this repository**.
+
+### First local result
+
+After the core installation above, create a **blank example case outside the source checkout** and generate its initial report. This makes no platform request and confirms no manufacturer.
+
+Windows PowerShell:
+
+```powershell
+$ExampleCases = Join-Path (Split-Path (Get-Location).Path -Parent) 'factorytrace-example-cases'
+& $ToolkitPython -m factorytrace init DEMO-001 --root $ExampleCases
+$ExampleCase = Join-Path $ExampleCases 'DEMO-001'
+& $ToolkitPython -m factorytrace validate --case-root $ExampleCase
+& $ToolkitPython -m factorytrace assess --case-root $ExampleCase
+& $ToolkitPython -m factorytrace report --case-root $ExampleCase --format md,json,csv
+```
+
+macOS / Linux:
+
+```bash
+EXAMPLE_CASES="$(dirname "$PWD")/factorytrace-example-cases"
+"$TOOLKIT_PYTHON" -m factorytrace init DEMO-001 --root "$EXAMPLE_CASES"
+EXAMPLE_CASE="$EXAMPLE_CASES/DEMO-001"
+"$TOOLKIT_PYTHON" -m factorytrace validate --case-root "$EXAMPLE_CASE"
+"$TOOLKIT_PYTHON" -m factorytrace assess --case-root "$EXAMPLE_CASE"
+"$TOOLKIT_PYTHON" -m factorytrace report --case-root "$EXAMPLE_CASE" --format md,json,csv
+```
+
+Open the case's `output` directory. The first report contains placeholders and missing evidence, not a researched supplier result. If `DEMO-001` already exists, inspect it and choose a new name rather than deleting it. To investigate a real product, continue with [First case and report](DEPLOY.md#8-first-case-and-report) and the [material checklist](factory_trace_toolkit/PHOTO_MATERIAL_CHECKLIST.md).
 
 ### Requirements
 
@@ -135,6 +195,10 @@ factorytrace/
 | Handling vulnerabilities/disclosure | [Security](SECURITY.md) |
 | Checking licences | [MIT](LICENSE), [third-party notices](THIRD_PARTY_NOTICES.md) |
 
+### Related projects
+
+[Exhibitor Research Archive](https://github.com/KietC/exhibitor-research-archive) prepares exhibitor lists, while [Local Evidence Collector](https://github.com/KietC/local-evidence-collector) captures supported website records and offers a separate market-discovery workflow. Their reviewed candidates and original files can be starting material here. No automatic cross-project adapter is shipped, and importing a lead must not turn it into a confirmed manufacturer.
+
 ### Validation and support
 
 The source includes a manual GitHub Actions workflow. Select **Actions → manual-cross-platform-validation → Run workflow** when desired; a matrix definition is not evidence that every OS/Python combination has passed. Do not infer macOS/Linux success from a Windows test.
@@ -153,9 +217,40 @@ Project-owned code and documentation use [MIT](LICENSE). Third-party assets/depe
 
 ## 中文
 
-追溯产品背后的**真实制造主体、生产地点、模具责任方与目标工序**，而不只是找到售卖相似图片的店铺。
+调查一款产品**由谁制造、在哪里生产，以及现有材料能证明什么**。从产品图、参数或文件开始，整理厂家候选、比较细节、检查认证和生产记录，生成带来源链接与待核问题的报告。
 
-FactoryTrace 由本地 Python 工具包与可复用 Agent Skill 组成：保留原件、结构化主张与矛盾、核验产品/地点/认证关联，并生成可审查报告。它是研究流程和证据整理工具，不是厂家数据库，也不是自动确认供应商的引擎。
+FactoryTrace 是本地 Python 工具包，也附有可选 Agent Skill。人员或研究代理负责搜集和审查材料，工具负责整理原件、检查记录中的对应关系。它不是预装的厂家数据库，也不是自动确认供应商的服务。
+
+### 适合什么场景
+
+- **分清工厂和贸易商：**检查卖家的公司主体、车间与生产材料，是否支持“我们自己生产”的说法。
+- **寻找 OEM/ODM 来源：**围绕精确产品和需要的制造工序，对比不同候选公司。
+- **复核认证或供应商变化：**检查记录中的型号、材质、额定参数与获准地点是否仍对应，先记录缺口，再下结论。
+
+### 你提供什么，最后得到什么
+
+| 你提供 | 工具产出 | 仍需你判断 |
+| --- | --- | --- |
+| 产品图、尺寸、材质、标签和文件 | 原件、文件哈希、搜索变体与查询词 | 去哪些来源调查，还缺哪些材料 |
+| 厂家候选和已保存的网页、认证、生产材料 | 候选评估、主张与来源记录、矛盾检查 | 来源是否真实，是否支持这一具体主张 |
+| 已审核的案件记录 | Markdown、JSON、CSV 报告；可选 Excel、Word | 材料是否足以确认制造方 |
+
+**小例子：**你拿到一张产品图，三家卖家都说自己生产。分别记录三家的说法，比较精确产品参数，保存制造地点、认证和生产材料，再输出各候选的支持依据与缺口。图片相似本身不能确认工厂。
+
+### 真实平台与各自用途
+
+下面是附带研究流程中明确列出的来源，不表示 CLI 自动连接这些平台，也不表示全部平台已完成实际验收。搜索、登录和官方核验通过你已授权的浏览器/搜索工具完成；保存的材料与结构化记录再交给本地工具评估。
+
+| 平台或来源 | 研究用途 | 当前接入方式与边界 |
+| --- | --- | --- |
+| [WaterMark Product Search](https://watermark.abcb.gov.au/watermark-search) | 查澳大利亚涉水产品许可证、型号与状态 | [认证评估模块](factory_trace_toolkit/src/factorytrace/certification.py)检查已记录的产品与地点范围；不全量抓官方库，也不能证明录入记录真实。 |
+| [UL Product iQ](https://productiq.ulprospector.com/) | 查 UL 档案/类别、精确产品及获准地点 | 同样处理已保存记录；不附账号，不自动登录或全库采集。沿签发机构当前官方入口核验。 |
+| 1688、淘宝、Alibaba | 找产品和卖家候选，分开销售主体与制造说法 | 人员/代理通过正常会话研究，店铺同款只是线索。 |
+| LinkedIn、Facebook、YouTube、Instagram | 查企业历史、职业角色和生产视频线索 | [平台研究指南](skills/trace-source-factory/references/social-and-platform-research.md)覆盖这些来源；不附社媒账号，也没有通用全站爬虫。 |
+| 微信公众号/视频号、抖音、快手 | 查公开企业内容、产品历史与车间工序视频 | 文档列出的研究来源；通过授权工具保存可访问内容，记录转载和访问失败。 |
+| 兼容 Codex 的 Agent 应用 | 可选辅助研究和工具调度 | Skill 提供工作方法；核心 CLI 不依赖 Agent、大模型或 API Key。 |
+
+核验项与访问回执见[认证研究](skills/trace-source-factory/references/certification-watermark-ul.md)及[平台研究](skills/trace-source-factory/references/social-and-platform-research.md)。仓库没有真实供应商案件、登录态或通讯录，与这些平台不存在隶属关系。
 
 ### 功能
 
@@ -204,6 +299,34 @@ TOOLKIT_PYTHON="$PWD/factory_trace_toolkit/.venv/bin/python"
 ```
 
 预期帮助有 `init`、`ingest`、`assess`、`report`、`audit`。报错先停，不要换用未知全局同名命令。案件和私有环境回执必须在**本仓库外**。
+
+### 先生成一个本地结果
+
+完成上面的 core 安装后，在**源码仓库外**创建空白示例案件，生成初始报告。此步骤不请求任何平台，也不会确认厂家。
+
+Windows PowerShell：
+
+```powershell
+$ExampleCases = Join-Path (Split-Path (Get-Location).Path -Parent) 'factorytrace-example-cases'
+& $ToolkitPython -m factorytrace init DEMO-001 --root $ExampleCases
+$ExampleCase = Join-Path $ExampleCases 'DEMO-001'
+& $ToolkitPython -m factorytrace validate --case-root $ExampleCase
+& $ToolkitPython -m factorytrace assess --case-root $ExampleCase
+& $ToolkitPython -m factorytrace report --case-root $ExampleCase --format md,json,csv
+```
+
+macOS / Linux：
+
+```bash
+EXAMPLE_CASES="$(dirname "$PWD")/factorytrace-example-cases"
+"$TOOLKIT_PYTHON" -m factorytrace init DEMO-001 --root "$EXAMPLE_CASES"
+EXAMPLE_CASE="$EXAMPLE_CASES/DEMO-001"
+"$TOOLKIT_PYTHON" -m factorytrace validate --case-root "$EXAMPLE_CASE"
+"$TOOLKIT_PYTHON" -m factorytrace assess --case-root "$EXAMPLE_CASE"
+"$TOOLKIT_PYTHON" -m factorytrace report --case-root "$EXAMPLE_CASE" --format md,json,csv
+```
+
+打开案件的 `output` 目录。第一份报告包含占位内容和证据缺口，不是真实供应商调查结论。`DEMO-001` 已存在时先检查，再换新名称，不要删除已有资料。实际调查继续看 [首案与报告](DEPLOY.md#8-first-case-and-report)及[材料清单](factory_trace_toolkit/PHOTO_MATERIAL_CHECKLIST.md)。
 
 ### 环境与依赖
 
@@ -269,6 +392,10 @@ factorytrace/
 | 贡献代码 | [贡献指南](CONTRIBUTING.md) |
 | 漏洞/泄露 | [安全说明](SECURITY.md) |
 | 许可证 | [MIT](LICENSE)、[第三方声明](THIRD_PARTY_NOTICES.md) |
+
+### 与其他项目怎么配合
+
+[Exhibitor Research Archive](https://github.com/KietC/exhibitor-research-archive)整理展商名单；[Local Evidence Collector](https://github.com/KietC/local-evidence-collector)保存已适配网站记录，并另有市场线索研究流程。它们已审核的候选及原件可以作为本项目起点。目前没有自动跨项目适配器，导入线索不能把它变成已确认厂家。
 
 ### 验证与支持
 

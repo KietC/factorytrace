@@ -62,6 +62,58 @@ def read_lock(path: Path) -> dict[str, str]:
     return result
 
 
+def prepare_build_python(
+    temporary_root: Path,
+    wheelhouse: Path,
+    lock: dict[str, str],
+    environment: dict[str, str],
+) -> Path:
+    """Install the pinned backend into a disposable build venv, never the caller.
+
+    将锁定的构建后端装进一次性构建 venv，不依赖或改动调用者环境。
+    """
+    if not lock.get("pip") or not lock.get("setuptools"):
+        raise ValueError("The tested lock must declare pip and setuptools.")
+    build_root = temporary_root / "build-venv"
+    venv.EnvBuilder(with_pip=True, system_site_packages=False).create(build_root)
+    build_python = (
+        build_root / "Scripts" / "python.exe"
+        if os.name == "nt"
+        else build_root / "bin" / "python"
+    )
+    invoke(
+        [
+            str(build_python), "-m", "pip", "install", "--no-index",
+            "--find-links", str(wheelhouse),
+            f"pip=={lock['pip']}", f"setuptools=={lock['setuptools']}",
+        ],
+        cwd=temporary_root,
+        environment=environment,
+    )
+    return build_python
+
+
+def isolated_environment(temporary_root: Path) -> dict[str, str]:
+    """Ignore inherited pip/install/import configuration without changing the host.
+
+    忽略继承的 pip 安装与导入配置，不修改宿主变量；代理和证书传输设置保留。
+    """
+    environment = os.environ.copy()
+    for name in list(environment):
+        if name.upper().startswith("PIP_") or name.upper() in {
+            "PYTHONPATH", "PYTHONHOME", "VIRTUAL_ENV",
+        }:
+            environment.pop(name)
+    environment.update({
+        "PIP_CONFIG_FILE": os.devnull,
+        "PIP_CACHE_DIR": str(temporary_root / "pip-cache"),
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUTF8": "1",
+        "PYTHONIOENCODING": "utf-8",
+    })
+    return environment
+
+
 def assert_release_tree_has_no_links(root: Path) -> None:
     excluded = {
         ".venv",
@@ -111,9 +163,6 @@ def main() -> int:
     args = parser.parse_args()
     root = args.root.resolve()
     lock = read_lock(root / "constraints-tested.txt")
-    environment = os.environ.copy()
-    environment["PYTHONUTF8"] = "1"
-    environment["PYTHONIOENCODING"] = "utf-8"
     commands: list[dict[str, Any]] = []
     scratch_parent = root / "output"
     scratch_parent.mkdir(parents=True, exist_ok=True)
@@ -123,6 +172,7 @@ def main() -> int:
         prefix="wheel-smoke-", dir=scratch_parent
     ) as temporary:
         temporary_root = Path(temporary).resolve()
+        environment = isolated_environment(temporary_root)
         source_stage = temporary_root / "source"
         shutil.copytree(
             root,
@@ -170,9 +220,13 @@ def main() -> int:
                 "wheelhouse_files": len(list(wheelhouse.iterdir())),
             }
         )
+        # Python 3.12+ venvs need an explicit backend; keep it isolated and offline.
+        # Python 3.12+ venv 不再自带后端；明确装入隔离环境并离线使用。
+        build_python = prepare_build_python(temporary_root, wheelhouse, lock, environment)
+        commands.append({"step": "install_isolated_build_backend_offline", "status": "PASS"})
         build = invoke(
             [
-                sys.executable,
+                str(build_python),
                 "-m",
                 "pip",
                 "wheel",

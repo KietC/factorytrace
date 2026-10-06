@@ -4,6 +4,8 @@
 
 The first public release also canonicalizes trusted OS temporary roots in test fixtures (including the macOS `/var` alias), retains production symlink/junction rejection, and pins current CI actions without leaving checkout credentials behind.
 
+Wheel verification installs pinned pip/setuptools into a disposable build venv before using `--no-build-isolation`; it no longer relies on a backend preinstalled in the caller or CI runner.
+
 Public edition: bilingual entrypoints and comments, explicit non-overwriting Skill installer, reusable source/privacy verifier, MIT licensing with separate third-party notices, commit-pinned manual CI, and open-font OCR reproduction. Historical version headings below describe software evolution, not production cases. Version 2.0.0 introduces separated parties/sites/products/processes/evidence, multi-axis assessment instead of factory odds, ACH and same-source clustering, certificate/site adapters, social links, event chains, and unified reports. Earlier releases add provenance, environment declarations, deterministic image handling and confirmation gates. Preserve version/schema consistency when changing the package; regenerate manifests only after reviewing the actual changes.
 
 For ordered cross-platform commands, expected outputs and recovery actions, use [DEPLOY.md](../DEPLOY.md). The Chinese reference below retains the full method details; command names and schemas are language-independent.
@@ -11,6 +13,8 @@ For ordered cross-platform commands, expected outputs and recovery actions, use 
 ## 中文详细参考
 
 首次公开发布还规范化了测试中的可信系统临时根（包括 macOS 的 `/var` 别名），保留生产代码的软链接/联接拒绝规则，并固定当前 CI 动作提交、不保留检出凭据。
+
+Wheel 验收在使用 `--no-build-isolation` 前，把锁定 pip/setuptools 装入一次性构建 venv，不再依赖调用者或 CI runner 的预装后端。
 
 # Changelog
 

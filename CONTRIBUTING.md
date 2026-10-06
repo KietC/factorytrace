@@ -77,7 +77,7 @@ gh release create "$RELEASE_TAG" --draft --target "$RELEASE_COMMIT" --title "Fac
 gh workflow run publish-release.yml --ref main -f "release_tag=$RELEASE_TAG"
 ```
 
-4. Monitor the resulting run in Actions. The workflow rechecks privacy/hashes, 76 unit tests, Skill self-test and isolated wheel resources; external OCR/video engine checks are explicitly excluded. It requires an empty draft targeting the exact SHA and no existing Git tag; lookup errors fail closed. Only users with the required repository/Actions permissions can trigger publication. The job uses the repository token; no personal token is embedded in source. Do not manually edit/publish the draft while the run is active.
+4. Monitor the resulting run in Actions. The workflow rechecks privacy/hashes, the complete unit suite, Skill self-test and isolated wheel resources; external OCR/video engine checks are explicitly excluded. It requires an empty draft targeting the exact SHA and no existing Git tag; lookup errors fail closed. Only users with the required repository/Actions permissions can trigger publication. The job uses the repository token; no personal token is embedded in source. Do not manually edit/publish the draft while the run is active.
 5. Successful publication supplies source ZIP, wheel and `SHA256SUMS.txt`. Download all three, verify both SHA-256 digests and ZIP CRC, and test a fresh clone/extraction. A failed run can leave an unpublished draft with partial assets; inspect it before retrying. The workflow never uses `--clobber`: duplicate asset names stop the run. Review and clear only identified task-owned draft assets before retrying; do not delete published assets or move existing tags.
 
 Do not work around a stale `starter` upload by disabling TLS, deleting the repository, or rewriting history. Cancel only the identified task-owned uploader and remove/replace only that draft's incomplete assets. Keep local source archives until the remote files have passed read-back checks.
@@ -157,7 +157,7 @@ gh release create "$RELEASE_TAG" --draft --target "$RELEASE_COMMIT" --title "Fac
 gh workflow run publish-release.yml --ref main -f "release_tag=$RELEASE_TAG"
 ```
 
-4. 在 Actions 看实际运行。流程复查隐私/哈希、76 项单测、Skill 自检和隔离 wheel 资源；明确不含外部 OCR/视频引擎测试。要求草稿为空、指向精确 SHA 且 Git 标签尚未创建；查询错误直接停止。只有具备所需仓库/Actions 权限者可触发发布。仅发布任务使用仓库 token，不把个人 token 写入源码。运行中不要手动编辑或发布该草稿。
+4. 在 Actions 看实际运行。流程复查隐私/哈希、完整单测、Skill 自检和隔离 wheel 资源；明确不含外部 OCR/视频引擎测试。要求草稿为空、指向精确 SHA 且 Git 标签尚未创建；查询错误直接停止。只有具备所需仓库/Actions 权限者可触发发布。仅发布任务使用仓库 token，不把个人 token 写入源码。运行中不要手动编辑或发布该草稿。
 5. 成功后有源码 ZIP、wheel 和 `SHA256SUMS.txt`。三个都下载，核验两个 SHA-256 与 ZIP CRC，并测试全新克隆/解压。失败可能留下带部分附件的未发布草稿，重试前先看状态。流程不用 `--clobber`，重名即停；重试前只清理确认属于本任务的草稿附件，不删正式发布附件，不移动既有标签。
 
 `starter` 上传停滞时不要关闭 TLS、删仓库或改写历史。只取消确认属于本任务的上传进程，只处理该草稿未完成的附件；远端文件回读验收前保留本地源码包。

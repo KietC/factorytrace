@@ -38,6 +38,8 @@ This is a failure-oriented companion to the ordered [deployment guide](../DEPLOY
 | Shell cannot find `factorytrace` | Unactivated environment/PATH | Use the intended venv interpreter with `-m factorytrace` |
 | pip cannot find a pinned release/wheel | Exact snapshot mismatch, mirror lag, Python/architecture incompatibility | Check error and metadata; try allowed ranges without historic constraints, record versions; never disable TLS |
 | Package build requires a compiler | No compatible wheel for selected ABI/architecture | Use standard supported Python and platform build prerequisites only if needed; do not assume binary wheels everywhere |
+| `Cannot import setuptools.build_meta` when building a wheel | New venvs do not necessarily include setuptools; `--no-build-isolation` does not install a backend | Use the bundled wheel checker: it installs pinned pip/setuptools offline into a disposable build venv before building. Do not install build dependencies globally or rely on unrelated preinstalled packages. See [Python venv](https://docs.python.org/3/library/venv.html) and [pip build isolation](https://pip.pypa.io/en/stable/reference/build-system/index.html) |
+| Wheel checks install or import from an unexpected location | Inherited pip configuration, `PIP_TARGET`/`PIP_ROOT` or `PYTHONPATH` can redirect a nominally isolated operation | The wheel checker clears pip/import settings in its child-environment copy, disables pip config files and keeps its cache inside the temporary root; HTTP(S) proxies and certificate transport variables remain available. It uses the default package index instead of inherited `PIP_INDEX_URL`/pip config. No host variable is changed. See [pip configuration](https://pip.pypa.io/en/stable/topics/configuration/) |
 | `docx` or `cv2` import fails | Reports/media extras absent or wrong import/distribution name | Install `[reports]`/`[media]`/`[full]`; distribution `python-docx` imports `docx`, OpenCV imports `cv2` |
 | Unix `[full]` behaves strangely | Unquoted shell glob | Quote the whole install target including `[full]` |
 | `ffmpeg` exists but video check fails | `ffprobe` missing, broken codec or executable | Probe both FFmpeg and ffprobe, then use capability smoke to isolate round-trip failure |
@@ -123,6 +125,8 @@ The OCR smoke uses licensed bundled font assets where available, so it should no
 | 找不到 factorytrace | 未激活/PATH | venv python 加 `-m factorytrace` |
 | pip 找不到锁定版本/wheel | 快照/镜像/Python/架构不匹配 | 读完整错误，按元数据范围装、记版本，不关 TLS |
 | 要求编译器 | 所选 ABI/架构无 wheel | 标准支持版；必要时官方构建前置，不假定都有 wheel |
+| 构建 wheel 报 `Cannot import setuptools.build_meta` | 新 venv 不保证自带 setuptools；`--no-build-isolation` 不会安装后端 | 使用包内 wheel 校验器：它先将锁定的 pip/setuptools 离线装到一次性构建 venv，再构建。不往全局装后端，也不借用无关预装包。见 [Python venv](https://docs.python.org/3/library/venv.html) 与 [pip 构建隔离](https://pip.pypa.io/en/stable/reference/build-system/index.html) |
+| Wheel 验收装包/导入位置出乎预期 | 继承的 pip 配置、`PIP_TARGET`/`PIP_ROOT` 或 `PYTHONPATH` 能重定向“隔离”操作 | 校验器只清理子进程环境副本的 pip/导入配置，禁用 pip 配置文件，缓存放临时根内；保留 HTTP(S) 代理与证书传输变量。使用默认包索引，不继承 `PIP_INDEX_URL`/pip 配置，不改宿主变量。见 [pip 配置](https://pip.pypa.io/en/stable/topics/configuration/) |
 | docx/cv2 导入失败 | 未装 extras/导入名不同 | 装 reports/media/full；python-docx 导入 docx，OpenCV 导入 cv2 |
 | Unix full 表现异常 | `[full]` 未引用发生 glob | 整个安装目标加引号 |
 | FFmpeg 有但视频错 | 无 ffprobe/编解码器坏 | 两个程序都测，再用能力测试定位 |
